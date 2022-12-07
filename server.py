@@ -9,8 +9,6 @@ from urllib.parse import urlparse
 RECV_BYTES = 4096 # The number of bytes to try to read for every call to recv.
 
 # Configure logging
-# Comment/Uncomment to chose your desired logging level.  Changing this could
-# also be made programmable if needed.
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 # logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 hw2_logger = logging.getLogger('cs450-hw2')
@@ -27,11 +25,9 @@ def parse_url(url):
         is parsed from the URL or None if an error is encoutnered.
 
     Notes:
-        You are welcome to use the urlpasrse function to parse the url in an
-        RFC compliant manner.  However, you will then need to validate the
-        output and set default values if they were not specified.  For example,
-            - You should assume a scheme of http if none is specified.
-            - If no port is specified, you should assume a port of 80 for HTTP
+        I assume:
+            - A scheme of http if none is specified.
+            - If no port is specified, a port of 80 for HTTP
               and a port of 443 for HTTPS.
             - If the port is invalid, this is an error
     """
@@ -63,6 +59,7 @@ def parse_url(url):
     except Exception as e:
         return None
     # Hint: Reading the port attribute will raise a ValueError if an invalid port is specified in the URL.
+    # 
     #       If no port number is specified, use the default port according to the scheme (http or https).
 
     # Path getting
@@ -84,9 +81,9 @@ def open_connection(hostname, port):
     Returns:
         An open socket to the server or None if an error is encountered.
 
-    Notes:
-        To correctly support both IPv4 and IPv6 addresses, you must use the
-        socket.getaddrinfo() function.  Importantly, although simpler, the
+    Description:
+        I use the socket.getaddrinfo() function to correctly parse 
+        both IPv4 and IPv6 addresses.  Importantly, although simpler, the
         socket.gethostbyname() function is deprecated because it only
         supports IPv4.
 
@@ -96,7 +93,7 @@ def open_connection(hostname, port):
             as its arguments, and the connect() function of a socket object
             accepts a sockaddr as its arguments.
 
-        Given a list of addresses, you should try to connect to all of them in
+        Given a list of addresses, the function tries to connect to all of them in
         order until success is achieved.
     """
     # Initialize the socket to None
@@ -139,11 +136,8 @@ def wrap_socket_ssl(s, hostname):
     Returns:
         A wrapped socket (socket) on success.  None on error.
 
-    Notes:
-        - See the documentation for the python ssl library
-          (https://docs.python.org/3/library/ssl.html)
+    Description:
         - Create an SSLContext (ssl.SSLContext)
-          (https://docs.python.org/3/library/ssl.html#ssl.SSLContext)
             - Require TLS
         - Require certificates (ssl.CERT_REQUIRED)
         - Check the hostname
@@ -189,8 +183,8 @@ def gen_http_req(hostname, port, path):
     Returns:
         A valid HTTP 1.1 request (bytes).
 
-    Notes:
-        The request should be a HTTP/1.1 request, and it should include at
+    Description:
+        Function checks that the request is a HTTP/1.1 request, and it should include at
         least the following headers:
             - Host:
             - 'Connection: close'
@@ -222,10 +216,8 @@ def send_req(s, req):
     Returns:
         bool: True on success.  False on error.
 
-    Notes:
-        It is recommended to use sendall as part of this function.  See this
-        note on Python's sendall function from Stack Overflow:
-        https://stackoverflow.com/questions/34252273/what-is-the-difference-between-socket-send-and-socket-sendall
+    Description:
+        Send all bytes through socket.
     """
 
     # ============ YOUR CODE STARTS HERE ============
